@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Finance Tracker</title>
+	<style>
+		body {
+			font-family: 'Inter', Arial, sans-serif;
+			background: linear-gradient(135deg, #e0e7ff, #f5f3ff);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+			margin: 0;
+			color: #1e1e1e;
+		}
+
+		h1 {
+			font-size: 2.5rem;
+			margin-bottom: 1rem;
+			color: #1d4ed8;
+			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
+
+		p {
+			font-size: 1.1rem;
+			margin-top: 0.5rem;
+		}
+
+		a {
+			display: inline-block;
+			margin: 0 0.5rem;
+			padding: 0.6rem 1.2rem;
+			border-radius: 8px;
+			text-decoration: none;
+			background-color: #2563eb;
+			color: white;
+			transition: background 0.3s ease, transform 0.1s ease;
+		}
+
+		a:hover {
+			background-color: #1e40af;
+			transform: translateY(-2px);
+		}
+
+		.container {
+			text-align: center;
+			padding: 2rem 3rem;
+			background: white;
+			border-radius: 16px;
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>💰 Welcome to Finance Tracker</h1>
+		<p>Track your expenses. Reach your goals.</p>
+		<p>
+			<a href="{{ url_for('login') }}">Login</a>
+			<a href="{{ url_for('register') }}">Register</a>
+		</p>
+	</div>
+</body>
+</html>
