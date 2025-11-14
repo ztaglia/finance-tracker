@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request
+from flask import Flask, render_template, url_for, redirect, request, flash, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
@@ -6,14 +6,17 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from datetime import date, datetime
-from flask import flash, Response
 from sqlalchemy import func
+import os
+from dotenv import load_dotenv
 
-
+# load .env file
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SECRET_KEY'] = 'secret_key'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URI")
+app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
@@ -138,7 +141,10 @@ def dashboard():
     cat_values = [round(float((s or 0)), 2) for _, s in cat_rows]
     
 	# Day chart
-    day_q = db.session.query(Expense.date, func.sum(Expense.amount)).filter(Expense.user_id == current_user.id)
+    day_q = (
+        db.session.query(Expense.date, func.sum(Expense.amount))
+        .filter(Expense.user_id == current_user.id)
+	)
     day_rows = day_q.group_by(Expense.date).all()
     day_labels = [d.isoformat() for d, _ in day_rows]
     day_values = [round(float((s or 0)), 2) for _, s in day_rows]
@@ -198,6 +204,8 @@ def dashboard():
     total = round(sum(e.amount for e in expenses), 2)
 
     categories = Category.query.filter_by(user_id=current_user.id).all()
+    
+    print(expenses)
 
     return render_template(
         'dashboard.html',
